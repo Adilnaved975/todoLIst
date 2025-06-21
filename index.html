@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Todo List</h1>
+    <div class="section">
+        <input type="text" class="input-field">
+    <button class="add-btn">Add to list</button>
+    </div>
+    <div class="main-container">
+        
+    </div>
+
+
+
+
+    <script>
+        
+        let parsedItemsArr=JSON.parse(localStorage.getItem('items'));
+        let mainContainer=document.querySelector('.main-container');
+          let container=document.querySelector('.container');
+        let inputValue=document.querySelector('.input-field');
+        let addBtn=document.querySelector('.add-btn');
+        
+       
+       let itemsArr=[];
+        // making IIF function
+        
+
+
+        function add(value){
+            mainContainer.insertAdjacentHTML('beforeend', `<div class="container">
+         <ul>
+            <li>${value}</li>
+        </ul>
+        <button class="del-btn add-btn" data-set="name"">
+            Delete
+        </button>
+        </div>`)
+        }
+ (function (parsedItemsArr){
+            itemsArr=parsedItemsArr;
+            for(let items of parsedItemsArr){
+                add(items);
+            }
+        })(parsedItemsArr);
+        addBtn.addEventListener("click",()=>{
+            inputValue.value=inputValue.value.trim();
+            if((!(itemsArr.includes(inputValue.value))) && (inputValue.value !== "")){
+                
+            itemsArr.push(inputValue.value);
+            localStorage.setItem('items',JSON.stringify(itemsArr));
+          add(inputValue.value);
+          inputValue.value="";
+            }else if(inputValue.value === ""){
+                alert('Please Enter item');
+            }else{
+                alert('Item already exists');
+            }
+        });
+
+        // function delItem(e){
+        //     container.remove(e.target);
+        // }
+
+        mainContainer.addEventListener('click',function(e){
+            let targetValue=e.target;
+            let div=targetValue.closest('div');
+            if(targetValue.hasAttribute('data-set')){
+               div.remove();
+             let delValue=div.firstElementChild.firstElementChild.innerText;
+             let index=itemsArr.indexOf(delValue);
+             itemsArr.splice(index,1);
+             localStorage.setItem('items',JSON.stringify(itemsArr));
+            }
+            
+        });
+    </script>
+</body>
+</html>
